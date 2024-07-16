@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Servlet Login</title>
+    <title>Home</title>
 </head>
 <body>
 <h1>Minha Página de Login com Servlet</h1>
 <br/>
-<a href="/login.jsp">Fazer login:</a>
+<a href="/WEB-INF/views/home.jsp">Home:</a>
 </body>
 </html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+         http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+
+    <display-name>Biblioteca</display-name>
+
+    <!-- Configuração do servlet LivroController -->
+    <servlet>
+        <servlet-name>LivroController</servlet-name>
+        <servlet-class>controller.LivroController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LivroController</servlet-name>
+        <url-pattern>/livros/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Configuração da página de boas-vindas -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
