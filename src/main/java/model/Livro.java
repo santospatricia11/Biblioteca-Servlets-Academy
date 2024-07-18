@@ -1,26 +1,40 @@
 package model;
 
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Table;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+@Entity
+@Table(name = "table-livro")
 public class Livro {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ISBN")
     private String ISBN ;
+    @Column(name = "name_livro")
     private  String nomeLivro ;
+    @Column(name = "Categoria")
     private  String categoria;
+    @Column(name = "descricao")
     private String descricao;
-    private String diretorioImagem;
+    @Column(name = "capa_livro")
+    private String capa;
+    @Column(name = "quantidade_livro")
     private int quantidade;
 
     public Livro() {
     }
 
-    public Livro(String ISBN, String nomeLivro, String categoria, String descricao, int quantidade, String diretorioImagem) {
+    public Livro(String ISBN, String nomeLivro, String categoria, String descricao, int quantidade, String capa) {
         this.ISBN = ISBN;
         this.nomeLivro = nomeLivro;
         this.categoria = categoria;
         this.descricao = descricao;
         this.quantidade = quantidade;
-        this.diretorioImagem = diretorioImagem;
+        this.capa = capa;
 
     }
 
@@ -32,7 +46,7 @@ public class Livro {
                 ", categoria='" + categoria + '\'' +
                 ", descricao='" + descricao + '\'' +
                 ", quantidade=" + quantidade +
-                ", diretorioImagem =" + diretorioImagem +
+                ", diretorioImagem =" + capa +
                 '}';
     }
 
@@ -76,11 +90,11 @@ public class Livro {
         this.quantidade = quantidade;
     }
 
-    public String getDiretorioImagem() {
-        return diretorioImagem;
+    public String getCapa() {
+        return capa;
     }
 
-    public void setDiretorioImagem(String diretorioImagem) {
-        this.diretorioImagem = diretorioImagem;
+    public void setCapa(String capa) {
+        this.capa = capa;
     }
 }

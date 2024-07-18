@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "LivroController", urlPatterns = {"/index", "/livros/new", "/livros/insert","/livros/delete","/views/list-books.jsp"})
+@WebServlet(name = "LivroController", urlPatterns = {"/index","/home", "/livros/new", "/livros/insert","/livros/delete","/list-livro.jsp"})
 public class LivroController extends HttpServlet {
 
     private LivroDao livroDao;
@@ -52,13 +52,13 @@ public class LivroController extends HttpServlet {
             throws ServletException, IOException {
         List<Livro> livros = livroDao.listarLivros();
         request.setAttribute("listLivro", livros);
-        request.getRequestDispatcher("/views/list-books.jsp").forward(request, response);
+        request.getRequestDispatcher("/list-livro.jsp").forward(request, response);
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setAttribute("livro", new Livro());
-        request.getRequestDispatcher("/views/add-book.jsp").forward(request, response);
+        request.getRequestDispatcher("/add-livro.jsp").forward(request, response);
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
@@ -66,7 +66,7 @@ public class LivroController extends HttpServlet {
         String isbn = request.getParameter("isbn");
         Livro existingBook = livroDao.buscarLivroPorISBN(isbn);
         request.setAttribute("livro", existingBook);
-        request.getRequestDispatcher("/views/edit-book.jsp").forward(request, response);
+        request.getRequestDispatcher("/edit-livro.jsp").forward(request, response);
     }
 
     private void insertBook(HttpServletRequest request, HttpServletResponse response)

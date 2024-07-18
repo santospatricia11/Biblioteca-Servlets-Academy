@@ -17,9 +17,18 @@
         <servlet-name>LivroController</servlet-name>
         <url-pattern>/livros/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>LoginController</servlet-name>
+        <servlet-class>controller.LoginController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LoginController</servlet-name>
+        <url-pattern>/home/*</url-pattern>
+    </servlet-mapping>
 
     <!-- Configuração da página de boas-vindas -->
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>/welcome.jsp</welcome-file>
     </welcome-file-list>
 </web-app>
