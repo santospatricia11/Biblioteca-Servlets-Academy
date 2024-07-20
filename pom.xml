@@ -12,8 +12,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
     </properties>
 
     <dependencies>
@@ -24,6 +24,31 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.3.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/jstl/jstl -->
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.5.0</version>
+        </dependency>
 
         <dependency>
             <groupId>jakarta.platform</groupId>
@@ -83,23 +108,21 @@
         <version>3.0.0</version>
     </dependency>
     <dependency>
-        <groupId>jakarta.persistence</groupId>
-        <artifactId>jakarta.persistence-api</artifactId>
-        <version>2.2.3</version>
+        <groupId>jakarta.platform</groupId>
+        <artifactId>jakarta.jakartaee-web-api</artifactId>
+        <version>10.0.0</version>
+        <scope>provided</scope>
     </dependency>
-
+    <dependency>
+        <groupId>jakarta.servlet.jsp.jstl</groupId>
+        <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+        <version>3.0.0</version>
+    </dependency>
     <dependency>
         <groupId>org.glassfish.web</groupId>
         <artifactId>jakarta.servlet.jsp.jstl</artifactId>
         <version>3.0.1</version>
     </dependency>
-
-    <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>jstl</artifactId>
-        <version>1.2</version>
-    </dependency>
-
     <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
@@ -125,11 +148,25 @@
     <version>5.6.15.Final</version>
     </dependency>
 
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+    </dependency>
+
 <dependency>
 <groupId>org.projectlombok</groupId>
 <artifactId>lombok</artifactId>
 <version>1.18.28</version>
 </dependency>
+
     <build>
         <plugins>
             <plugin>
@@ -140,6 +177,11 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
+
 </project>

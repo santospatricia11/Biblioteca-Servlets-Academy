@@ -1,34 +1,34 @@
 package model;
 
-import jakarta.persistence.*;
 
-import javax.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-@Entity
-@Table(name = "table-user")
 public class Usuario {
-
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
-    @Column(name = "name_usuario")
+    private long ID;
     private String nome ;
-    @Column(name = "email")
+
     private String email ;
 
     private String password;
 
 
-
-    public Usuario(String nome, String email, String password, Long id) {
+    public Usuario(String nome, String email, String password) {
         this.nome = nome;
         this.email = email;
         this.password = password;
-        this.id = id;
+
+    }
+
+    public Usuario(String password, String email) {
     }
 
     public Usuario() {
+
     }
 
     @Override
@@ -37,8 +37,16 @@ public class Usuario {
                 "nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", id=" + id +
+
                 '}';
+    }
+
+    public long getID() {
+        return ID;
+    }
+
+    public void setID(long ID) {
+        this.ID = ID;
     }
 
     public String getNome() {
@@ -65,11 +73,5 @@ public class Usuario {
         this.password = password;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public Long getId() {
-        return id;
-    }
 }

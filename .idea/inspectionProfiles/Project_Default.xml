@@ -1,0 +1,31 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="CheckNodeTest" enabled="true" level="WARNING" enabled_by_default="true">
+      <scope name="Project Files" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="HardwiredNamespacePrefix" enabled="true" level="WARNING" enabled_by_default="true">
+      <scope name="Project Files" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="ImplicitTypeConversion" enabled="true" level="WARNING" enabled_by_default="true">
+      <scope name="Project Files" level="WARNING" enabled="true">
+        <option name="BITS" value="1720" />
+        <option name="FLAG_EXPLICIT_CONVERSION" value="true" />
+        <option name="IGNORE_NODESET_TO_BOOLEAN_VIA_STRING" value="true" />
+      </scope>
+      <option name="BITS" value="1720" />
+      <option name="FLAG_EXPLICIT_CONVERSION" value="true" />
+      <option name="IGNORE_NODESET_TO_BOOLEAN_VIA_STRING" value="true" />
+    </inspection_tool>
+    <inspection_tool class="IndexZeroUsage" enabled="true" level="WARNING" enabled_by_default="true">
+      <scope name="Project Files" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="RedundantTypeConversion" enabled="true" level="WARNING" enabled_by_default="true">
+      <scope name="Project Files" level="WARNING" enabled="true">
+        <option name="CHECK_ANY" value="false" />
+      </scope>
+      <option name="CHECK_ANY" value="false" />
+    </inspection_tool>
+    <inspection_tool class="XmlPathReference" enabled="false" level="ERROR" enabled_by_default="false" />
+  </profile>
+</component>

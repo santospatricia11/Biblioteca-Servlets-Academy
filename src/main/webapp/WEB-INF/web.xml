@@ -7,7 +7,19 @@
 
     <display-name>Biblioteca</display-name>
 
-    <!-- Configuração do servlet LivroController -->
+    <!-- Configuração do servlet UsuarioController -->
+
+    <servlet>
+        <servlet-name>UsuarioController</servlet-name>
+        <servlet-class>controller.UsuarioController</servlet-class>-->
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UsuarioController</servlet-name>
+        <url-pattern>/usuario/*</url-pattern>
+
+
+    </servlet-mapping>
     <servlet>
         <servlet-name>LivroController</servlet-name>
         <servlet-class>controller.LivroController</servlet-class>
@@ -17,18 +29,11 @@
         <servlet-name>LivroController</servlet-name>
         <url-pattern>/livros/*</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>LoginController</servlet-name>
-        <servlet-class>controller.LoginController</servlet-class>
-    </servlet>
 
-    <servlet-mapping>
-        <servlet-name>LoginController</servlet-name>
-        <url-pattern>/home/*</url-pattern>
-    </servlet-mapping>
 
-    <!-- Configuração da página de boas-vindas -->
+
     <welcome-file-list>
-        <welcome-file>/welcome.jsp</welcome-file>
+        <welcome-file>/cadastro.jsp</welcome-file>
     </welcome-file-list>
+
 </web-app>

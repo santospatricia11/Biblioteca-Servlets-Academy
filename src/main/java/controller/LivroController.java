@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "LivroController", urlPatterns = {"/index","/home", "/livros/new", "/livros/insert","/livros/delete","/list-livro.jsp"})
+@WebServlet({"/livros", "/livro-form.jsp","/livros/new","/livros/edit","/livros/insert"})
 public class LivroController extends HttpServlet {
 
     private LivroDao livroDao;
@@ -52,13 +52,13 @@ public class LivroController extends HttpServlet {
             throws ServletException, IOException {
         List<Livro> livros = livroDao.listarLivros();
         request.setAttribute("listLivro", livros);
-        request.getRequestDispatcher("/list-livro.jsp").forward(request, response);
+        request.getRequestDispatcher("/livro-list.jsp").forward(request, response);
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setAttribute("livro", new Livro());
-        request.getRequestDispatcher("/add-livro.jsp").forward(request, response);
+        request.getRequestDispatcher("/livro-form.jsp").forward(request, response);
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
@@ -66,7 +66,7 @@ public class LivroController extends HttpServlet {
         String isbn = request.getParameter("isbn");
         Livro existingBook = livroDao.buscarLivroPorISBN(isbn);
         request.setAttribute("livro", existingBook);
-        request.getRequestDispatcher("/edit-livro.jsp").forward(request, response);
+        request.getRequestDispatcher("/edite-livro.jsp").forward(request, response);
     }
 
     private void insertBook(HttpServletRequest request, HttpServletResponse response)
@@ -76,7 +76,7 @@ public class LivroController extends HttpServlet {
         String categoria = request.getParameter("categoria");
         String descricao = request.getParameter("descricao");
         int quantidade = Integer.parseInt(request.getParameter("quantidade"));
-        String diretorioImagem = request.getParameter("diretorioImagem");
+        String diretorioImagem = request.getParameter("Capa");
 
         Livro newBook = new Livro(isbn, nomeLivro, categoria, descricao, quantidade, diretorioImagem);
         livroDao.salvarLivro(newBook);
@@ -90,7 +90,7 @@ public class LivroController extends HttpServlet {
         String categoria = request.getParameter("categoria");
         String descricao = request.getParameter("descricao");
         int quantidade = Integer.parseInt(request.getParameter("quantidade"));
-        String diretorioImagem = request.getParameter("diretorioImagem");
+        String diretorioImagem = request.getParameter("Capa");
 
         Livro book = new Livro(isbn, nomeLivro, categoria, descricao, quantidade, diretorioImagem);
         livroDao.atualizarLivro(book);

@@ -1,6 +1,9 @@
 package dao;
 
 import model.Livro;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -9,44 +12,70 @@ import javax.persistence.Query;
 import java.util.List;
 
 public class LivroDao {
-    private EntityManagerFactory entityManagerFactory;
-    private EntityManager entityManager;
 
-    public LivroDao() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("LivroPU");
-        entityManager = (EntityManager) entityManagerFactory.createEntityManager();
-    }
+        private EntityManager entityManager;
 
-    public void salvarLivro(Livro livro) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(livro);
-        entityManager.getTransaction().commit();
-    }
+        public LivroDao() {
+            this.entityManager = entityManager;
+        }
 
-    public Livro buscarLivroPorISBN(String ISBN) {
-        return entityManager.find(Livro.class, ISBN);
-    }
+        public void salvarLivro(Livro livro) {
+            EntityTransaction transaction = entityManager.getTransaction();
+            try {
+                transaction.begin();
+                entityManager.persist(livro);
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction.isActive()) {
+                    transaction.rollback();
+                }
+                throw e;
+            }
+        }
 
-    public List<Livro> listarLivros() {
-        Query query = entityManager.createQuery("SELECT l FROM Livro l");
-        return query.getResultList();
-    }
+        public void atualizarLivro(Livro livro) {
+            EntityTransaction transaction = entityManager.getTransaction();
+            try {
+                transaction.begin();
+                entityManager.merge(livro);
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction.isActive()) {
+                    transaction.rollback();
+                }
+                throw e;
+            }
+        }
 
-    public void atualizarLivro(Livro livro) {
-        entityManager.getTransaction().begin();
-        entityManager.merge(livro);
-        entityManager.getTransaction().commit();
-    }
+        public void deletarLivro(String isbn) {
+            EntityTransaction transaction = entityManager.getTransaction();
+            try {
+                transaction.begin();
+                Livro livro = entityManager.find(Livro.class, isbn);
+                if (livro != null) {
+                    entityManager.remove(livro);
+                }
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction.isActive()) {
+                    transaction.rollback();
+                }
+                throw e;
+            }
+        }
 
-    public void deletarLivro(String ISBN) {
-        Livro livro = entityManager.find(Livro.class, ISBN);
-        entityManager.getTransaction().begin();
-        entityManager.remove(livro);
-        entityManager.getTransaction().commit();
-    }
+        public Livro buscarLivroPorISBN(String isbn) {
+            return entityManager.find(Livro.class, isbn);
+        }
 
-    public void fecharConexao() {
-        entityManager.close();
-        entityManagerFactory.close();
+        public List<Livro> listarLivros() {
+            return entityManager.createQuery("SELECT l FROM Livro l", Livro.class).getResultList();
+        }
+
+        public void fecharConexao() {
+            if (entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+
     }
-}

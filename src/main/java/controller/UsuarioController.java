@@ -1,139 +1,100 @@
 package controller;
 
+
+import controller.util.ManipulacaoData;
 import dao.UsuarioDao;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import model.Usuario;
+import service.UserAuthenticator;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 
-@WebServlet("/usuario")
+@WebServlet({"/usuario","/login","/cadastro","/listAllUsers","/index"})
 public class UsuarioController extends HttpServlet {
-
+    private static final long serialVersionUID = 1L;
 
     private UsuarioDao usuarioDao;
 
-    @Override
-    public void init() throws ServletException {
-        super.init();
+    public UsuarioController() {
+        super();
+    }
+
+    public void init() {
         usuarioDao = new UsuarioDao();
     }
 
-    @Override
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getPathInfo();
-        if (action == null) {
-            action = "/";
-        }
-
-        switch (action) {
-            case "/":
-                listarUsuarios(request, response);
-                break;
-            case "/editar":
-                mostrarFormularioEditar(request, response);
-                break;
-            case "/excluir":
-                excluirUsuario(request, response);
-                break;
-            default:
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }
+        processarRequisicao(request, response);
     }
 
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getPathInfo();
-        if (action == null) {
-            action = "/";
+        processarRequisicao(request, response);
+    }
+
+    private void processarRequisicao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String acao = request.getParameter("acao");
+        System.out.println("Ação recebida: " + acao); // Log para depuração
+        if (acao == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Ação não especificada.");
+            return;
         }
 
-        switch (action) {
-            case "/":
-                adicionarUsuario(request, response);
-                break;
-            case "/editar":
-                atualizarUsuario(request, response);
-                break;
-            default:
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        try {
+            switch (acao) {
+                case "novo":
+                    novoUsuario(request, response);
+                    break;
+                case "inserir":
+                    gravarUsuario(request, response);
+                    break;
+                default:
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Ação desconhecida.");
+                    break;
+            }
+        } catch (Exception ex) {
+            throw new ServletException(ex);
         }
     }
 
-    private void adicionarUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void novoUsuario(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void gravarUsuario(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+
         String nome = request.getParameter("nome");
         String email = request.getParameter("email");
-        String senha = request.getParameter("senha");
-        Usuario usuario = new Usuario(nome, email, senha, null);
-        usuarioDao.addUsuario(usuario);
+        String password = request.getParameter("password");
 
-        response.sendRedirect(request.getContextPath() + "/usuario/");
+
+        Usuario usuario = new Usuario(nome, email, password);
+
+        Usuario usuarioGravado = usuarioDao.inserirUsuario(usuario);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("castastro.jsp");
+        request.setAttribute("mensagem", "Usuário cadastrado com sucesso");
+        dispatcher.forward(request, response);
     }
 
-    private void atualizarUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long id = Long.parseLong(request.getParameter("id"));
-        String nome = request.getParameter("nome");
-        String email = request.getParameter("email");
-        String senha = request.getParameter("senha");
-        Optional<Usuario> usuarioOpt = usuarioDao.getUsuarioById(id);
 
-        if (usuarioOpt.isPresent()) {
-            Usuario usuario = usuarioOpt.get();
-            usuario.setNome(nome);
-            usuario.setEmail(email);
-            usuario.setPassword(senha);
+}
 
-            usuarioDao.updateUsuario(usuario);
-        }
 
-        response.sendRedirect(request.getContextPath() + "/usuario/");
-    }
 
-    private void excluirUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long id = Long.parseLong(request.getParameter("id"));
 
-        usuarioDao.deleteUsuario(id);
 
-        response.sendRedirect(request.getContextPath() + "/usuario/");
-    }
-
-    private void listarUsuarios(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Usuario> usuarios = usuarioDao.getAllUsuarios();
-
-        request.setAttribute("usuarios", usuarios);
-        request.getRequestDispatcher("/listagem-usuarios.jsp").forward(request, response);
-    }
-
-    private void mostrarFormularioEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long id = Long.parseLong(request.getParameter("id"));
-
-        // Obtenha o usuário do UsuarioDao com base no ID
-        Optional<Usuario> usuarioOpt = usuarioDao.getUsuarioById(id);
-
-        if (usuarioOpt.isPresent()) {
-            Usuario usuario = usuarioOpt.get();
-
-            // Defina o usuário como atributo no request
-            request.setAttribute("usuario", usuario);
-
-            // Encaminhe para a página JSP de formulário de edição de usuário
-            request.getRequestDispatcher("/formulario-editar-usuario.jsp").forward(request, response);
-        } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }
-    }
-
-    @Override
-    public void destroy() {
-        super.destroy();
-        usuarioDao.close();
-    }
-
-        }

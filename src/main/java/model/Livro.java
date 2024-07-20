@@ -8,21 +8,16 @@ import jakarta.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.Id;
 @Entity
-@Table(name = "table-livro")
+@Table(name = "Livros")
+
 public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ISBN")
     private String ISBN ;
-    @Column(name = "name_livro")
     private  String nomeLivro ;
-    @Column(name = "Categoria")
     private  String categoria;
-    @Column(name = "descricao")
     private String descricao;
-    @Column(name = "capa_livro")
     private String capa;
-    @Column(name = "quantidade_livro")
     private int quantidade;
 
     public Livro() {
