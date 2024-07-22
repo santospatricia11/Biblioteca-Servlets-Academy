@@ -1,7 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Cadastrar</title>
+        <title>Cadastrar</title>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Coffee & Literature - Home</title>
+        <link rel="stylesheet" href="cadastro.css">
+
 </head>
 <body>
 <h2>Cadastro Usuário</h2>
@@ -12,6 +18,9 @@
     Email: <input type="text" name="email"><br>
     Senha: <input type="password" name="password"><br>
     <input type="submit" value="Cadastrar">
+
+    <a href="login.jsp">Entrar</a>
+
 </form>
 
 <br/>

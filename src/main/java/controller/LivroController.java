@@ -1,9 +1,12 @@
 package controller;
 
 import dao.LivroDao;
+import dao.UsuarioDao;
+import jakarta.servlet.RequestDispatcher;
 import model.Livro;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -12,102 +15,97 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Usuario;
 
-@WebServlet({"/livros", "/livro-form.jsp","/livros/new","/livros/edit","/livros/insert"})
+@WebServlet({"/livros", "/livros/new", "/livros/edit", "/livros/", "/livro/update", "/livro/delete", "/livro/list"})
+
 public class LivroController extends HttpServlet {
 
-    private LivroDao livroDao;
+        private static final long serialVersionUID = 1L;
 
-    @Override
-    public void init() throws ServletException {
-        livroDao = new LivroDao();
-    }
+        private LivroDao livroDao;
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getServletPath();
-        switch (action) {
-            case "/livros/new":
-                showNewForm(request, response);
-                break;
-            case "/livros/insert":
-                insertBook(request, response);
-                break;
-            case "/livros/delete":
-                deleteBook(request, response);
-                break;
-            case "/livros/edit":
-                showEditForm(request, response);
-                break;
-            case "/livros/update":
-                updateBook(request, response);
-                break;
-            default:
-                listBooks(request, response);
-                break;
+        public LivroController() {
+            super();
         }
-    }
 
-    private void listBooks(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        List<Livro> livros = livroDao.listarLivros();
-        request.setAttribute("listLivro", livros);
-        request.getRequestDispatcher("/livro-list.jsp").forward(request, response);
-    }
+        public void init() {
+            livroDao = new LivroDao();
+        }
 
-    private void showNewForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.setAttribute("livro", new Livro());
-        request.getRequestDispatcher("/livro-form.jsp").forward(request, response);
-    }
 
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String isbn = request.getParameter("isbn");
-        Livro existingBook = livroDao.buscarLivroPorISBN(isbn);
-        request.setAttribute("livro", existingBook);
-        request.getRequestDispatcher("/edite-livro.jsp").forward(request, response);
-    }
+        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            processarRequisicao(request, response);
+        }
 
-    private void insertBook(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        String isbn = request.getParameter("isbn");
-        String nomeLivro = request.getParameter("nomeLivro");
+        protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            processarRequisicao(request, response);
+        }
+
+        private void processarRequisicao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            String acao = request.getParameter("acao");
+            System.out.println("Ação recebida: " + acao); // Log para depuração
+            if (acao == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Ação não especificada.");
+                return;
+            }
+
+            try {
+                switch (acao) {
+                    case "novo":
+                        novoLivro(request, response);
+                        break;
+                    case "inserir":
+                        gravarLivro(request, response);
+                        break;
+                    default:
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Ação desconhecida.");
+                        break;
+                }
+            } catch (Exception ex) {
+                throw new ServletException(ex);
+            }
+        }
+
+        private void novoLivro(HttpServletRequest request, HttpServletResponse response)
+                throws ServletException, IOException {
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("livros.jsp");
+            dispatcher.forward(request, response);
+        }
+
+    private void gravarLivro(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+
+        String ISBN = request.getParameter("ISBN");
+        String nome_livro = request.getParameter("nome_livro");
         String categoria = request.getParameter("categoria");
         String descricao = request.getParameter("descricao");
-        int quantidade = Integer.parseInt(request.getParameter("quantidade"));
-        String diretorioImagem = request.getParameter("Capa");
 
-        Livro newBook = new Livro(isbn, nomeLivro, categoria, descricao, quantidade, diretorioImagem);
-        livroDao.salvarLivro(newBook);
-        response.sendRedirect("livros");
+        // Verifica se o parâmetro 'quantidade' não é nulo e é um número válido
+        String quantidadeParam = request.getParameter("quantidade");
+        int quantidade = 0; // Valor padrão
+        if (quantidadeParam != null && !quantidadeParam.isEmpty()) {
+            try {
+                quantidade = Integer.parseInt(quantidadeParam);
+            } catch (NumberFormatException e) {
+                // Log de erro ou tratamento apropriado
+                throw new ServletException("Quantidade inválida", e);
+            }
+        }
+
+        String capa = request.getParameter("capa");
+
+        Livro livro = new Livro(ISBN, nome_livro, categoria, descricao, quantidade, capa);
+
+        Livro livroGravado = livroDao.inserirLivro(livro);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("livros.jsp");
+        request.setAttribute("mensagem", "Livro cadastrado com sucesso");
+        dispatcher.forward(request, response);
     }
 
-    private void updateBook(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        String isbn = request.getParameter("isbn");
-        String nomeLivro = request.getParameter("nomeLivro");
-        String categoria = request.getParameter("categoria");
-        String descricao = request.getParameter("descricao");
-        int quantidade = Integer.parseInt(request.getParameter("quantidade"));
-        String diretorioImagem = request.getParameter("Capa");
 
-        Livro book = new Livro(isbn, nomeLivro, categoria, descricao, quantidade, diretorioImagem);
-        livroDao.atualizarLivro(book);
-        response.sendRedirect("livros");
-    }
-
-    private void deleteBook(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        String isbn = request.getParameter("isbn");
-        livroDao.deletarLivro(isbn);
-        response.sendRedirect("livros");
-    }
-
-    @Override
-    public void destroy() {
-        livroDao.fecharConexao();
-    }
 }
 
 

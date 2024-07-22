@@ -5,7 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 
-import javax.persistence.Column;
 import javax.persistence.Id;
 @Entity
 @Table(name = "Livros")
@@ -14,7 +13,7 @@ public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String ISBN ;
-    private  String nomeLivro ;
+    private  String nome_livro;
     private  String categoria;
     private String descricao;
     private String capa;
@@ -23,9 +22,9 @@ public class Livro {
     public Livro() {
     }
 
-    public Livro(String ISBN, String nomeLivro, String categoria, String descricao, int quantidade, String capa) {
+    public Livro(String ISBN, String nome_livro, String categoria, String descricao, int quantidade, String capa) {
         this.ISBN = ISBN;
-        this.nomeLivro = nomeLivro;
+        this.nome_livro = nome_livro;
         this.categoria = categoria;
         this.descricao = descricao;
         this.quantidade = quantidade;
@@ -37,7 +36,7 @@ public class Livro {
     public String toString() {
         return "Livro{" +
                 "ISBN='" + ISBN + '\'' +
-                ", nomeLivro='" + nomeLivro + '\'' +
+                ", nomeLivro='" + nome_livro + '\'' +
                 ", categoria='" + categoria + '\'' +
                 ", descricao='" + descricao + '\'' +
                 ", quantidade=" + quantidade +
@@ -49,8 +48,8 @@ public class Livro {
         return ISBN;
     }
 
-    public String getNomeLivro() {
-        return nomeLivro;
+    public String getNome_livro() {
+        return nome_livro;
     }
 
     public String getCategoria() {
@@ -69,8 +68,8 @@ public class Livro {
         this.ISBN = ISBN;
     }
 
-    public void setNomeLivro(String nomeLivro) {
-        this.nomeLivro = nomeLivro;
+    public void setNome_livro(String nomeLivro) {
+        this.nome_livro = nomeLivro;
     }
 
     public void setCategoria(String categoria) {

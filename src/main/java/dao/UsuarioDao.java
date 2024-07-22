@@ -40,14 +40,14 @@ public class UsuarioDao {
         statement.executeUpdate();
 
         ResultSet resultSet = statement.getGeneratedKeys();
-      /*  long id = 0;
+       long id = 0;
         if(resultSet.next())
             id = resultSet.getInt("id");
         statement.close();
 
         desconectar();
 
-        usuario.setID(id);*/
+        usuario.setID(id);
         return usuario;
     }
 

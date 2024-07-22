@@ -1,22 +1,59 @@
 package dao;
 
+import dao.util.Conexao;
 import model.Livro;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
-import java.util.List;
+import java.sql.*;
 
 public class LivroDao {
+    private Connection connection;
 
-        private EntityManager entityManager;
+    private void conectar() throws SQLException {
+        if (connection == null || connection.isClosed()) {
+            connection = Conexao.getConexao();
+        }
+    }
+
+    private void desconectar() throws SQLException {
+        if (connection != null && !connection.isClosed()) {
+            connection.close();
+        }
+    }
+
+
+    public Livro inserirLivro(Livro livro) throws SQLException {
+
+        String sql = "INSERT INTO livro ( ISBN,nome_livro, categoria,descricao,capa,quantidade) " + " VALUES (?,?,?,?, ?, ?)";
+
+        conectar();
+
+        PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        statement.setString(1, livro.getISBN());
+        statement.setString(2, livro.getNome_livro());
+        statement.setString(3, livro.getCategoria());
+        statement.setString(4, livro.getDescricao());
+        statement.setString(5, livro.getCapa());
+        statement.setInt(6, livro.getQuantidade());
+        statement.executeUpdate();
+
+        ResultSet resultSet = statement.getGeneratedKeys();
+       String isbn = "isbn";
+        if(resultSet.next())
+            isbn = resultSet.getString("isbn");
+        statement.close();
+
+        desconectar();
+
+        livro.setISBN(isbn);
+        return livro;
+    }
+
+
+        /*private EntityManager entityManager;
 
         public LivroDao() {
-            this.entityManager = entityManager;
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("nome-da-sua-unidade-de-persistencia");
+            this.entityManager = emf.createEntityManager();
         }
 
         public void salvarLivro(Livro livro) {
@@ -76,6 +113,8 @@ public class LivroDao {
             if (entityManager.isOpen()) {
                 entityManager.close();
             }
-        }
-
+        }*/
     }
+
+
+

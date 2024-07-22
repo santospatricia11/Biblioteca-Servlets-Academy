@@ -70,7 +70,7 @@ public class UsuarioController extends HttpServlet {
     private void novoUsuario(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("usuario/cadastro.jsp");
         dispatcher.forward(request, response);
     }
 

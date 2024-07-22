@@ -15,8 +15,8 @@
 <main>
     <div class="container">
         <a href="" id="sobre">Sobre o projeto</a>
-        <a href="listar.html" id="listar">Listar Livros</a>
-        <a href="cadastrarlivro.html" id="cadastrar">Cadastrar Livros</a>
+        <a href="listar.jsp" id="listar">Listar Livros</a>
+        <a href="cadastrarlivro.jsp" id="cadastrar">Cadastrar Livros</a>
     </div>
 </main>
 <footer>
